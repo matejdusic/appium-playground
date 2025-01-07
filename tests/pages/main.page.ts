@@ -1,31 +1,15 @@
-export class MainPage {
-    constructor(private driver: WebdriverIO.Browser) {}
+import { BasePage } from './base.page';
 
-    // Elements
-    private get animationButton() {
-        return this.driver.$('android=new UiSelector().text("Animation")');
+export class MainPage extends BasePage {
+    private get appButton() {
+        return this.driver.$('android=new UiSelector().text("App")');
     }
 
-    private get bouncingBallsButton() {
-        return this.driver.$('android=new UiSelector().text("Bouncing Balls")');
-    }
-
-    // Actions
-    async navigateToBouncingBalls() {
+    async isAppButtonDisplayed() {
         try {
-            console.log('Navigating to Animation section...');
-            await this.animationButton.waitForDisplayed({ timeout: 5000 });
-            await this.animationButton.click();
-            
-            console.log('Navigating to Bouncing Balls...');
-            await this.bouncingBallsButton.waitForDisplayed({ timeout: 5000 });
-            await this.bouncingBallsButton.click();
-            
-            // Wait for transition
-            await this.driver.pause(500);
-        } catch (error) {
-            console.error('Navigation failed:', error);
-            throw error;
+            return await this.appButton.isDisplayed();
+        } catch (e) {
+            return false;
         }
     }
 } 

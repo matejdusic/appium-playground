@@ -27,3 +27,6 @@ screenshots/
 # OS specific
 .DS_Store
 Thumbs.db 
+
+# PNG files
+*.png 

@@ -5,7 +5,12 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "test": "mocha -r ts-node/register 'tests/**/*.ts' --timeout 60000"
+    "test": "mocha -r ts-node/register --timeout 60000",
+    "test:dialog": "mocha -r ts-node/register tests/dialog.test.ts --timeout 60000",
+    "test:animation": "mocha -r ts-node/register tests/animation.test.ts --timeout 60000",
+    "test:mainScreen": "mocha -r ts-node/register tests/mainScreen.test.ts --timeout 60000",
+    "test:all": "mocha -r ts-node/register 'tests/**/*.ts' --timeout 60000",
+    "test:defaultLayoutAnimations": "mocha -r ts-node/register tests/defaultLayoutAnimations.test.ts --timeout 60000"
   },
   "keywords": [],
   "author": "",

@@ -1,10 +1,10 @@
 import { remote, Browser } from 'webdriverio';
 import { expect } from 'chai';
-import { MainPage } from './pages/main.page';
+import { AnimationPage } from './pages/animation.page';
 
 describe('Animation Tests', () => {
     let driver: Browser;
-    let mainPage: MainPage;
+    let animationPage: AnimationPage;
 
     before(async () => {
         driver = await remote({
@@ -18,21 +18,21 @@ describe('Animation Tests', () => {
                 'appium:app': `${process.cwd()}/ApiDemos-debug.apk`
             }
         });
+        animationPage = new AnimationPage(driver);
+    });
 
-        mainPage = new MainPage(driver);
+    beforeEach(async () => {
+        // Ensure we're on the main screen before each test
+        await animationPage.resetToMainScreen();
     });
 
     it('should animate bouncing balls on tap', async () => {
         try {
-            // Wait for app to load
-            await driver.pause(2000);
+            await animationPage.navigateToBouncingBalls();
             
-            // Navigate to Bouncing Balls
-            await mainPage.navigateToBouncingBalls();
-
             // Get the bouncing balls container
             const container = await driver.$('android=new UiSelector().className("android.view.View")');
-            await container.waitForDisplayed({ timeout: 5000 });
+            await container.waitForDisplayed({ timeout: 3000 });
             
             const containerLocation = await container.getLocation();
             const containerSize = await container.getSize();
@@ -45,7 +45,7 @@ describe('Animation Tests', () => {
 
             console.log(`Tapping at center: x=${centerPoint.x}, y=${centerPoint.y}`);
             
-            // Use W3C Actions API instead of touchPerform
+            // Use W3C Actions API for touch
             await driver.performActions([{
                 type: 'pointer',
                 id: 'finger1',
@@ -57,12 +57,6 @@ describe('Animation Tests', () => {
                 ]
             }]);
 
-            // Wait for animation
-            await driver.pause(1000);
-
-            // Verify we're still on the right screen
-            expect(await container.isDisplayed()).to.be.true;
-
             // Try another tap point
             const topRight = {
                 x: Math.floor(containerLocation.x + containerSize.width * 0.8),
@@ -70,8 +64,6 @@ describe('Animation Tests', () => {
             };
 
             console.log(`Tapping at top-right: x=${topRight.x}, y=${topRight.y}`);
-
-            // Second tap using W3C Actions API
             await driver.performActions([{
                 type: 'pointer',
                 id: 'finger1',
@@ -83,14 +75,26 @@ describe('Animation Tests', () => {
                 ]
             }]);
 
-            // Wait for second animation
-            await driver.pause(1000);
-
-            // Final verification
+            // Verify we're still on the right screen
             expect(await container.isDisplayed()).to.be.true;
 
         } catch (error) {
             console.error('Test failed:', error);
+            const timestamp = new Date().getTime();
+            await driver.saveScreenshot(`./error-bouncing-${timestamp}.png`);
+            throw error;
+        }
+    });
+
+    it('should hide button with animation', async () => {
+        try {
+            await animationPage.navigateToHideShow();
+            await animationPage.hideButton();
+            expect(await animationPage.isButtonHidden(), 'Button should be hidden').to.be.true;
+        } catch (error) {
+            console.error('Test failed:', error);
+            const timestamp = new Date().getTime();
+            await driver.saveScreenshot(`./error-hide-${timestamp}.png`);
             throw error;
         }
     });
