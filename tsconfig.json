@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "target": "es2018",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "outDir": "./dist",
+      "types": ["mocha", "chai", "node"],
+      "resolveJsonModule": true
+    },
+    "include": [
+      "tests/**/*.ts"
+    ],
+    "ts-node": {
+        "files": true,
+        "transpileOnly": true
+    }
+  }
