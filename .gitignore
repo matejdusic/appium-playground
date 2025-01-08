@@ -23,6 +23,7 @@ npm-debug.log*
 
 # Test artifacts
 screenshots/
+apps/
 
 # OS specific
 .DS_Store
@@ -30,3 +31,4 @@ Thumbs.db
 
 # PNG files
 *.png 
+error-*.png 
